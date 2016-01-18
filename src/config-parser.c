@@ -734,9 +734,9 @@ mb_kbd_config_load(MBKeyboard *kbd, char *variant, char *lang)
 
   if (! XML_Parse(p, data, strlen(data), 1)) {
     fprintf(stderr,
-	    "matchbox-keyboard:%s:%d: XML Parse error:%s\n",
+	    "matchbox-keyboard:%s:%lu: XML Parse error:%s\n",
 	    kbd->config_file,
-	    (int)XML_GetCurrentLineNumber(p),
+	    XML_GetCurrentLineNumber(p),
 	    XML_ErrorString(XML_GetErrorCode(p)));
 
     if (!state->keyboard->is_widget)
