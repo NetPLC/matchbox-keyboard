@@ -125,7 +125,7 @@ get_desktop_area(MBKeyboardUI *ui, int *x, int *y, int *width, int *height)
   Atom           atom_area, type;
   int            result, format;
   unsigned long  nitems, bytes_after;
-  int           *geometry = NULL;
+  long           *geometry = NULL;
 
   atom_area = XInternAtom (ui->xdpy, "_NET_WORKAREA", False);
 
