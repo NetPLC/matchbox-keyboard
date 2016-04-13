@@ -45,10 +45,16 @@ AC_ARG_ENABLE(examples,
 AM_CONDITIONAL(WANT_EXAMPLES, test x$enable_examples = xyes)
  
 AC_ARG_ENABLE(gtk-im,
-  AC_HELP_STRING([--enable-gtk-im], [enable GTK+ IM support [default=no]]),
-   		enable_im=$enableval, 
-		enable_im=no)	    
-AM_CONDITIONAL(WANT_IM, test x$enable_im = xyes)
+  AC_HELP_STRING([--enable-gtk-im], [enable GTK2+ IM support [default=no]]),
+                 enable_gtk2_im=$enableval,
+                 enable_gtk2_im=no)
+AM_CONDITIONAL(WANT_GTK2_IM, test x$enable_gtk2_im = xyes)
+
+AC_ARG_ENABLE(gtk3-im,
+  AC_HELP_STRING([--enable-gtk3-im], [enable GTK3+ IM support [default=no]]),
+                enable_gtk3_im=$enableval,
+                enable_gtk3_im=no)
+AM_CONDITIONAL(WANT_GTK3_IM, test x$enable_gtk3_im = xyes)
 
 AC_ARG_ENABLE(applet,
   AC_HELP_STRING([--enable-applet], [enable panel applet [default=no]]),
@@ -98,15 +104,21 @@ if test x$enable_cairo = xyes; then
    AC_DEFINE_UNQUOTED(WANT_CAIRO, 1, [Use Cairo to paint libs])
 fi
 
-if test x$enable_examples = xyes || test x$enable_im = xyes || test x$enable_gtk_widget = xyes; then
+if test x$enable_examples = xyes || test x$enable_gtk2_im = xyes || test x$enable_gtk_widget = xyes; then
    PKG_CHECK_MODULES(GTK2, gtk+-2.0)
    GTK_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
    AC_SUBST(GTK_VERSION)
-
-   if test x$enable_im = xyes || test x$enable_gtk_widget = xyes; then
+   if test x$enable_gtk_widget = xyes; then
       LIBRARY_REQUIRES="$LIBRARY_REQUIRES gtk+-2.0"
    fi
 fi
+
+if test x$enable_gtk3_im = xyes; then
+   PKG_CHECK_MODULES(GTK3, gtk+-3.0)
+   GTK3VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-3.0`
+   AC_SUBST(GTK3VERSION)
+fi
+
 
 if test x$enable_applet = xyes; then
    PKG_CHECK_MODULES(APPLET, matchbox-panel)
@@ -260,6 +272,7 @@ echo "
             Building with Cairo:          ${enable_cairo}
             Building Gtk widget:          ${enable_gtk_widget}
             Building Examples:            ${enable_examples}
-            Building GTK+ Input Method:   ${enable_im}
+            Building GTK2+ Input Method:  ${enable_gtk2_im}
+            Building GTK3+ Input Method:  ${enable_gtk3_im}
             Building panel applet:        ${enable_applet}
 "

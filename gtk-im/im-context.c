@@ -16,7 +16,7 @@
  *
  */
 
-#include <gtk/gtkimcontextsimple.h>
+#include <gtk/gtk.h>
 
 #include "im-context.h"
 #include "im-protocol.h"

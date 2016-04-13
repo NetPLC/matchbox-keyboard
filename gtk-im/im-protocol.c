@@ -29,24 +29,26 @@ protocol_send_event (MBKeyboardRemoteOperation op)
 {
   XEvent event;
   int xerror;
+  Display *display = gdk_x11_get_default_xdisplay ();
+  Window window = gdk_x11_get_default_root_xwindow ();
 
   memset (&event, 0, sizeof (XEvent));
 
   event.xclient.type = ClientMessage;
-  event.xclient.window = gdk_x11_get_default_root_xwindow ();
+  event.xclient.window = window;
   event.xclient.message_type = gdk_x11_get_xatom_by_name ("_MB_IM_INVOKER_COMMAND");
   event.xclient.format = 32;
   event.xclient.data.l[0] = op;
 
   gdk_error_trap_push ();
 
-  XSendEvent (GDK_DISPLAY (), 
-	      gdk_x11_get_default_root_xwindow (), 
+  XSendEvent (display,
+	      window,
 	      False,
 	      SubstructureRedirectMask | SubstructureNotifyMask,
 	      &event);
 
-  XSync (GDK_DISPLAY(), False);
+  XSync (display, False);
   
   if ((xerror = gdk_error_trap_pop ())) {
     g_warning ("X error %d", xerror);
