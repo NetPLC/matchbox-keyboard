@@ -19,7 +19,7 @@
 
 #include <gtk/gtk.h>
 #include <matchbox-panel/mb-panel.h>
-#include <matchbox-panel/mb-panel-scaling-image.h>
+#include <matchbox-panel/mb-panel-scaling-image2.h>
 #include <gtk-im/im-protocol.h>
 
 static void
@@ -35,9 +35,10 @@ mb_panel_applet_create (const char *id, GtkOrientation orientation)
 
   box = gtk_event_box_new ();
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (box), FALSE);
+  gtk_event_box_set_above_child (GTK_EVENT_BOX (box), TRUE);
   gtk_widget_set_name (box, "MatchboxPanelKeyboard");
 
-  image = mb_panel_scaling_image_new (orientation, "matchbox-keyboard");
+  image = mb_panel_scaling_image2_new (orientation, "matchbox-keyboard");
   gtk_container_add (GTK_CONTAINER (box), image);
 
   g_signal_connect (box, "button-release-event", G_CALLBACK (on_toggled), NULL);
